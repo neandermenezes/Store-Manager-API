@@ -30,8 +30,24 @@ const create = async (array) => {
   return sales;
 };
 
+const update = async (object) => {
+  const updatedSale = await salesModel.update(object);
+  const { id, productId, quantity } = updatedSale;
+
+  return {
+    saleId: id,
+    itemUpdated: [
+      {
+        productId,
+        quantity,
+      },
+    ],
+  };
+};
+
 module.exports = {
   listAll,
   listById,
   create,
+  update,
 };
