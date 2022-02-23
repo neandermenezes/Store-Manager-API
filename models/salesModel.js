@@ -20,7 +20,25 @@ const listById = async (id) => {
   return result;
 };
 
+const create = async (sales) => {
+  const querySales = 'INSERT INTO StoreManager.sales (date) VALUES (NOW())';
+  const [resultId] = await connection.execute(querySales);
+
+  const id = resultId.insertId;
+
+  const querySalesProducts = `INSERT INTO StoreManager.sales_products
+  (sale_id, product_id, quantity) VALUES (?, ?, ?);`;
+
+  await connection.execute(querySalesProducts, [id, sales[0].productId, sales[0].quantity]);
+
+  return {
+    id,
+    itemsSold: [...sales],
+  };
+};
+
 module.exports = {
   listAll,
   listById,
+  create,
 };

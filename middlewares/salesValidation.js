@@ -1,24 +1,31 @@
 const idValidation = async (req, res, next) => {
-  const { productId } = req.body;
-  if (!productId) return res.status(400).json({ message: '"productId" is required' });
+  const idData = req.body;
+  const isInvalid = idData.some((obj) => obj.productId === undefined);
+  if (isInvalid) { return res.status(400).json({ message: '"productId" is required' }); }
 
   next();
 };
 
-const quantityValidation = async (req, res, next) => {
-  const { quantity } = req.body;
-  if (!quantity || typeof quantity !== 'number') {
-    return res.status(400).json({ message: '"quantity" is required' });
-  }
+const salesQuantityValidation = async (req, res, next) => {
+  const quantityData = req.body;
 
-  if (quantity <= 0) {
-    return res.status(422).json({ message: '"quantity" must be greater than or equal to 1' });
-  }
+  const quantityNotInformed = quantityData.some(
+    ({ quantity }) => quantity !== undefined && typeof quantity !== 'number',
+  );
+
+  const quantityInvalid = quantityData.some(({ quantity }) => quantity <= 0);
+
+  if (quantityNotInformed) { return res.status(400).json({ message: '"quantity" is required' }); }
+  if (quantityInvalid) {
+ return res
+      .status(422)
+      .json({ message: '"quantity" must be greater than or equal to 1' });
+}
 
   next();
 };
 
 module.exports = {
   idValidation,
-  quantityValidation,
+  salesQuantityValidation,
 };

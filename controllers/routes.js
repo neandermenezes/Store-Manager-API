@@ -1,8 +1,10 @@
 const express = require('express');
 
 const productsValidation = require('../middlewares/productsValidation');
+const salesValidation = require('../middlewares/salesValidation');
 
 const { nameValidation, quantityValidation } = productsValidation;
+const { idValidation, salesQuantityValidation } = salesValidation;
 
 const productsController = require('./productsController');
 const salesController = require('./salesController');
@@ -18,6 +20,7 @@ productsRouter.delete('/:id', productsController.exclude);
 
 salesRouter.get('/', salesController.listAll);
 salesRouter.get('/:id', salesController.listById);
+salesRouter.post('/', idValidation, salesQuantityValidation, salesController.create);
 
 module.exports = {
   productsRouter,

@@ -24,7 +24,14 @@ const listById = async (id) => {
   return newSale;
 };
 
+const create = async (array) => {
+  const sales = await salesModel.create(array);
+
+  return sales;
+};
+
 module.exports = {
   listAll,
   listById,
+  create,
 };
