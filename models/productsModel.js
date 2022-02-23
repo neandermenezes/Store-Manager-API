@@ -1,5 +1,10 @@
 const connection = require('./connection');
 
+const exclude = async (id) => {
+  const query = 'DELETE FROM StoreManager.products WHERE id = ?;';
+  await connection.execute(query, [id]);
+};
+
 const update = async (product) => {
   const query = 'UPDATE StoreManager.products SET name = ?, quantity = ? WHERE id = ?;';
   await connection.execute(query, [product.name, product.quantity, product.id]);
@@ -36,4 +41,5 @@ module.exports = {
   listById,
   create,
   update,
+  exclude,
 };

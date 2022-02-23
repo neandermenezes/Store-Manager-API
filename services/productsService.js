@@ -33,9 +33,19 @@ const update = async (product) => {
   return updatedProduct;
 };
 
+const exclude = async (id) => {
+  const validProduct = await listById(id);
+
+  if (!validProduct) return false;
+
+  await productsModel.exclude(id);
+  return true;
+};
+
 module.exports = {
   listAll,
   listById,
   create,
   update,
+  exclude,
 };
