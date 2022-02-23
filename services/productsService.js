@@ -23,8 +23,19 @@ const create = async (product) => {
   return createdProduct;
 };
 
+const update = async (product) => {
+  const validProduct = await listById(product.id);
+
+  if (!validProduct) return false;
+
+  const updatedProduct = await productsModel.update(product);
+
+  return updatedProduct;
+};
+
 module.exports = {
   listAll,
   listById,
   create,
+  update,
 };
