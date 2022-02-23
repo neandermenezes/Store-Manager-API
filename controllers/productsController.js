@@ -1,5 +1,20 @@
 const productsService = require('../services/productsService');
 
+const create = async (req, res, next) => {
+  const { name, quantity } = req.body;
+
+  try {
+    const createdProduct = await productsService.create({ name, quantity });
+    if (!createdProduct) {
+      return res.status(409).json({ message: 'Product already exists' });
+    }
+
+    res.status(201).json(createdProduct);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const listAll = async (req, res, next) => {
   try {
     const products = await productsService.listAll();
@@ -27,4 +42,5 @@ const listById = async (req, res, next) => {
 module.exports = {
   listAll,
   listById,
+  create,
 };

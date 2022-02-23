@@ -1,4 +1,9 @@
 const express = require('express');
+
+const productsValidation = require('../middlewares/productsValidation');
+
+const { nameValidation, quantityValidation } = productsValidation;
+
 const productsController = require('./productsController');
 const salesController = require('./salesController');
 
@@ -7,6 +12,7 @@ const salesRouter = express.Router();
 
 productsRouter.get('/', productsController.listAll);
 productsRouter.get('/:id', productsController.listById);
+productsRouter.post('/', nameValidation, quantityValidation, productsController.create);
 
 salesRouter.get('/', salesController.listAll);
 salesRouter.get('/:id', salesController.listById);
