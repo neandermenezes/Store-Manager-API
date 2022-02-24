@@ -45,7 +45,7 @@ const create = async (array) => {
 
   const { itemsSold } = sales;
 
-  await Promise.all(itemsSold.map((item) => increaseProductQuantity(item)));
+  const quantity = await Promise.all(itemsSold.map((item) => increaseProductQuantity(item)));
 
   return sales;
 };

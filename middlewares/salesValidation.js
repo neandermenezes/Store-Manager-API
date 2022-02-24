@@ -1,3 +1,5 @@
+const productsModel = require('../models/productsModel');
+
 const idValidation = async (req, res, next) => {
   const idData = req.body;
   const isInvalid = idData.some((obj) => obj.productId === undefined);
@@ -22,7 +24,20 @@ const salesQuantityValidation = async (req, res, next) => {
   next();
 };
 
+const quantityAvailableValidation = async (req, res, next) => {
+  const { quantity, productId } = req.body[0];
+
+  const availableQuantity = await productsModel.listById(productId);
+
+  if (availableQuantity[0].quantity - quantity < 0) {
+    return res.status(422).json({ message: 'Such amount is not permitted to sell' });
+  }
+
+  next();
+};
+
 module.exports = {
   idValidation,
   salesQuantityValidation,
+  quantityAvailableValidation,
 };
