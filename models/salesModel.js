@@ -10,12 +10,12 @@ const listAll = async () => {
   return result;
 };
 
-const listById = async (id) => {
+const listById = async (saleId) => {
   const query = `SELECT sp.product_id, sp.quantity, s.date
   FROM StoreManager.sales_products as sp
   JOIN StoreManager.sales as s WHERE sp.sale_id = s.id AND sp.sale_id = ?
   ORDER BY sp.sale_id, sp.product_id;`;
-  const [result] = await connection.execute(query, [id]);
+  const [result] = await connection.execute(query, [saleId]);
 
   return result;
 };
@@ -45,9 +45,18 @@ const update = async (updatedSale) => {
   return updatedSale;
 };
 
+const exclude = async (saleId) => {
+  const querySaleProducts = 'DELETE FROM StoreManager.sales_products WHERE sale_id = ?;';
+  await connection.execute(querySaleProducts, [saleId]);
+
+  const querySale = 'DELETE FROM StoreManager.sales WHERE id = ?;';
+  await connection.execute(querySale, [saleId]);
+};
+
 module.exports = {
   listAll,
   listById,
   create,
   update,
+  exclude,
 };
