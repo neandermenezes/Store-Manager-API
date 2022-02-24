@@ -10,7 +10,7 @@ const idValidation = async (req, res, next) => {
 
 const salesQuantityValidation = async (req, res, next) => {
   const quantityData = req.body;
-  console.log(quantityData);
+
   const isMissingQuantity = quantityData.some((obj) => obj.quantity === undefined);
   if (isMissingQuantity) { return res.status(400).json({ message: '"quantity" is required' }); }
 

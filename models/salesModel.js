@@ -21,6 +21,7 @@ const listById = async (saleId) => {
 };
 
 const create = async (sales) => {
+  console.log(sales);
   const querySales = 'INSERT INTO StoreManager.sales (date) VALUES (NOW())';
   const [resultId] = await connection.execute(querySales);
 
@@ -29,7 +30,8 @@ const create = async (sales) => {
   const querySalesProducts = `INSERT INTO StoreManager.sales_products
   (sale_id, product_id, quantity) VALUES (?, ?, ?);`;
 
-  await connection.execute(querySalesProducts, [id, sales[0].productId, sales[0].quantity]);
+  await sales.forEach((sale) => connection
+    .execute(querySalesProducts, [id, sale.productId, sale.quantity]));
 
   return {
     id,
@@ -53,10 +55,18 @@ const exclude = async (saleId) => {
   await connection.execute(querySale, [saleId]);
 };
 
+const getSalesById = async (saleId) => {
+  const query = 'SELECT * FROM StoreManager.sales_products WHERE sale_id = ?;';
+  const [result] = await connection.execute(query, [saleId]);
+
+  return result;
+};
+
 module.exports = {
   listAll,
   listById,
   create,
   update,
   exclude,
+  getSalesById,
 };

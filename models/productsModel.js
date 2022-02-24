@@ -36,10 +36,16 @@ const exclude = async (id) => {
   await connection.execute(query, [id]);
 };
 
+const updateQuantity = async (id, quantity) => {
+  const query = 'UPDATE StoreManager.products SET quantity = ? WHERE id = ?;';
+  await connection.execute(query, [quantity, id]);
+};
+
 module.exports = {
   listAll,
   listById,
   create,
   update,
   exclude,
+  updateQuantity,
 };

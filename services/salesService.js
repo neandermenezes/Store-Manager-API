@@ -1,4 +1,5 @@
 const salesModel = require('../models/salesModel');
+const productsModel = require('../models/productsModel');
 
 const sequelize = (product) => ({
   saleId: product.sale_id,
@@ -6,6 +7,21 @@ const sequelize = (product) => ({
   productId: product.product_id,
   quantity: product.quantity,
 });
+
+const increaseProductQuantity = async (product) => {
+  const quantity = await productsModel.listById(product.productId);
+  const newQuantity = (quantity[0].quantity - product.quantity);
+
+  await productsModel.updateQuantity(product.productId, newQuantity);
+  return newQuantity;
+};
+
+const decreaseProductQuantity = async (product) => {
+  const quantity = await productsModel.listById(product.product_id);
+  const newQuantity = (quantity[0].quantity + product.quantity);
+
+  await productsModel.updateQuantity(product.product_id, newQuantity);
+};
 
 const listAll = async () => {
   const sales = await salesModel.listAll();
@@ -27,6 +43,10 @@ const listById = async (id) => {
 const create = async (array) => {
   const sales = await salesModel.create(array);
 
+  const { itemsSold } = sales;
+
+  await Promise.all(itemsSold.map((item) => increaseProductQuantity(item)));
+
   return sales;
 };
 
@@ -46,9 +66,13 @@ const update = async (object) => {
 };
 
 const exclude = async (id) => {
-  const validProduct = await listById(id);
+  const validSale = await listById(id);
 
-  if (!validProduct) return false;
+  if (!validSale) return false;
+
+  const sales = await salesModel.getSalesById(id);
+
+  sales.forEach((sale) => decreaseProductQuantity(sale));
 
   await salesModel.exclude(id);
   return true;
