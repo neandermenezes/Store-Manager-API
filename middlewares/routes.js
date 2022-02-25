@@ -1,18 +1,19 @@
 const express = require('express');
 
-const productsValidation = require('../middlewares/productsValidation');
-const salesValidation = require('../middlewares/salesValidation');
+const productsValidation = require('./productsValidation');
+const salesValidation = require('./salesValidation');
+const error = require('./error');
 
 const { nameValidation, quantityValidation } = productsValidation;
 const { idValidation, salesQuantityValidation, quantityAvailableValidation } = salesValidation;
 
-const productsController = require('./productsController');
-const salesController = require('./salesController');
+const productsController = require('../controllers/productsController');
+const salesController = require('../controllers/salesController');
 
 const productsRouter = express.Router();
 const salesRouter = express.Router();
 
-productsRouter.get('/', productsController.listAll);
+productsRouter.get('/', productsController.listAll, error);
 productsRouter.get('/:id', productsController.listById);
 productsRouter.post(
   '/',

@@ -109,6 +109,8 @@ describe('Tests create service cases', () => {
     const result = await productsService.create(payloadProduct);
 
     expect(result).to.be.false;
+
+    productsService.create.restore();
   });
 });
 
