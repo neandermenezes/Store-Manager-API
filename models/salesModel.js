@@ -21,7 +21,6 @@ const listById = async (saleId) => {
 };
 
 const create = async (sales) => {
-  console.log(sales);
   const querySales = 'INSERT INTO StoreManager.sales (date) VALUES (NOW())';
   const [resultId] = await connection.execute(querySales);
 
