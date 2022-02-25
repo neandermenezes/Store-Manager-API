@@ -25,16 +25,16 @@ const decreaseProductQuantity = async (product) => {
 
 const listAll = async () => {
   const sales = await salesModel.listAll();
-
+  console.log(sales);
   const newSales = sales.map((sale) => sequelize(sale));
-
+  console.log(newSales);
   return newSales;
 };
 
 const listById = async (id) => {
   const sale = await salesModel.listById(id);
 
-  if (sale.length === 0) return false;
+  if (!sale || sale.length === 0) return false;
 
   const newSale = sale.map((sales) => sequelize(sales));
   return newSale;

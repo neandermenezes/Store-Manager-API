@@ -9,7 +9,7 @@ const listAll = async () => {
 const listById = async (id) => {
   const product = await productsModel.listById(id);
 
-  if (product.length === 0) return false;
+  if (!product || product.length === 0) return false;
 
   return product[0];
 };
